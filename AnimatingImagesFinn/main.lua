@@ -38,18 +38,43 @@ local spacerock = display.newImageRect("Images/SpaceRock.png" , 100,100)
 
 -- set the x and y position of the spacerock
 spacerock.x = display.contentWidth/2
-spacerock.y = display.contentHeight/3
+spacerock.y = display.contentHeight/7
+
+-- set the x and y position of the asteroid
+local asteroid = display.newImageRect("Images/asteroid.png" , 100,100) 
+
+-- set the x and y position of the asteroid
+asteroid.x = display.contentWidth/1.3
+asteroid.y = display.contentHeight/3
+
+
+
 
 -- explosion image with width and height
-local explosion = display.newImageRect("Images/explosion.png" , 200, 200)
+local explosion = display.newImageRect("Images/explosion.png" , 10, 10)
 
 -- set the x and y position of the explosion
 explosion.x = display.contentWidth/2
 explosion.y = display.contentHeight/1.5
 
--- create the variable for my sound
-local explosionSound = audio.loadSound("Sounds/Explosion.wav")
+--load the sound
+local explosionSound = audio.loadSound("Sounds/explosion.wav")
 local explosionSoundChannel
+
+
+-- Function: playAudio
+-- Input: this function accepts an event listener
+-- Output: plays the explosion sound once
+-- Description: This function stops the audio after it has been played once.
+local function stopAudio(event)
+      audio.play(explosionSound)
+end
+
+--delay the time before the audio plays so it lines up with hitting the planet
+timer.performWithDelay(1000, stopAudio)
+
+
+
 -- Function: MoveMeteor
 -- Input: this function accepts an event listener
 -- Output: none
@@ -61,9 +86,40 @@ local function MoveMeteor(event)
 	 meteor.y = meteor.y + scrollSpeed
 	 -- change the alpha of the ship every time it moves so that it fades out
 	 meteor.alpha = meteor.alpha - 0.001 
-	 --load the sound
-	explosionSoundChannel = audio.play(explosionSound)
 end
 
--- MoveShip will be called over and over again
+-- Function: MoveAsteroid
+-- Input: this function accepts an event listener
+-- Output: none
+-- Description: This function adds the scroll speed to the X-value of the ship
+-- This function also grows
+local function MoveAsteroid(event)
+	 -- add the scroll speed to the x-value of the ship
+	 asteroid.x = asteroid.x + scrollSpeed
+	 -- make the image grow a bit every frame
+	 asteroid:scale( 1.005, 1.005 )
+
+end
+
+-- Function: MoveAsteroid
+-- Input: this function accepts an event listener
+-- Output: none
+-- Description: This function adds the scroll speed to the X-value of the ship
+-- This image also rotates
+local function MoveSpaceRock(event)
+	 -- add the scroll speed to the x-value of the ship
+	 spacerock.y = spacerock.y - scrollSpeed
+end
+
+--continuisly spin the image
+transition.to(spacerock, {x=-250, rotation = spacerock.rotation-360,time=2000, onComplete = spinImage} ) 
+
+
+-- MoveMeteor will be called over and over again
 Runtime:addEventListener("enterFrame" , MoveMeteor)
+
+-- MoveAsteroid will be called over and over again
+Runtime:addEventListener("enterFrame" , MoveAsteroid)
+
+-- MoveSpaceRock will be called over and over again
+Runtime:addEventListener("enterFrame" , MoveSpaceRock)
