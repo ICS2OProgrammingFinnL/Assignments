@@ -107,8 +107,6 @@ end
 
 local function AskQuestion() 
 	-- generate 3 random numbers between a max. and a min. number
-	randomNumber1 = math.random(0, 10)
-	randomNumber2 = math.random(0, 10)
 	randomOperator = math.random(1,4)
 
 	--addition
@@ -146,8 +144,8 @@ local function AskQuestion()
 	elseif (randomOperator == 4) then
 
 
-		randomNumber1 = math.random(0, 10)
-		randomNumber2 = math.random(0, 10)
+		randomNumber1 = math.random(0, 100)
+		randomNumber2 = math.random(0, 100)
 
 		correctAnswer = randomNumber1 / randomNumber2
 
