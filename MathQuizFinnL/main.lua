@@ -37,7 +37,8 @@ local startingPoints = 0
 local points
 local gameOverImage
 local trophy
-
+local youWinImage
+local exponent
 
 
 --variables for the  timer
@@ -107,7 +108,7 @@ end
 
 local function AskQuestion() 
 	-- generate 3 random numbers between a max. and a min. number
-	randomOperator = math.random(1,4)
+	randomOperator = math.random(2,2)
 
 	--addition
 	if (randomOperator == 1) then
@@ -125,11 +126,16 @@ local function AskQuestion()
 		randomNumber1 = math.random(0, 20)
 		randomNumber2 = math.random(0, 20)
 
-
-		correctAnswer = randomNumber1 - randomNumber2
-
-		--create question in text object
-		questionObject.text = randomNumber1 .. " - " .. randomNumber2 .. " = "
+			if(randomNumber2 > randomNumber1) then
+				--if the first number is less than the second, swith the order they come in
+				correctAnswer = randomNumber2 - randomNumber1
+				--create question in text object
+				questionObject.text = randomNumber2 .. " - " .. randomNumber1 .. " = "
+			else
+				correctAnswer = randomNumber1 - randomNumber2
+				--create question in text object
+				questionObject.text = randomNumber1 .. " - " .. randomNumber2 .. " = "
+			end
 	--multiplacation
 	elseif (randomOperator == 3) then
 
@@ -147,10 +153,27 @@ local function AskQuestion()
 		randomNumber1 = math.random(0, 100)
 		randomNumber2 = math.random(0, 100)
 
+		--division
 		correctAnswer = randomNumber1 / randomNumber2
 
 		--create question in text object
 		questionObject.text = randomNumber1 .. " / " .. randomNumber2 .. " = "
+	
+	elseif (randomOperator == 5) then
+	randomNumber1 = math.random(1,5)
+	randomNumber2 = math.random(1,4)
+	--make the exponent
+	exponent = math.pow(randomNumber1, randomNumber2)
+	--exponent
+	correctAnswer = exponent
+
+	--create question in text object
+	questionObject.text = randomNumber1 .. " ^ " .. randomNumber2 .. " = "
+
+	--elseif
+	--randomNumber1
+
+
 
 
 
@@ -167,6 +190,7 @@ end
 local function YouWin()
 	if (startingPoints == 5 ) then
 		trophy.isVisible = true
+		youWinImage.isVisible = true
 		numericField.isVisible = false
 		questionObject.isVisible = false
 		clockText.isVisible = false
@@ -214,7 +238,7 @@ local function NumericFieldListener(event)
 
 
 				--display the points going up
-				points.text = " Points = " .. startingPoints
+				points.text = " Number Correct = " .. startingPoints
 			else
 				--if they aren't the same
 				incorrectObject.isVisible = true
@@ -243,10 +267,11 @@ gameOverImage.x = 515
 gameOverImage.y = 400
 --displays a  question and sets the colour
 questionObject = display.newText("", display.contentWidth/3, display.contentHeight/2, nil, 50 )
-questionObject:setTextColor(155/255, 100/255, 100/255)
+questionObject:setTextColor(0/255, 255/255, 100/255)
 
-points = display.newText("Points = " .. startingPoints , display.contentWidth/1.4, display.contentHeight/2, nil, 50 )
+points = display.newText("Number Correct = " .. startingPoints , display.contentWidth/1.4, display.contentHeight/2, nil, 50 )
 points:setTextColor(155/255, 100/255, 100/255)
+points.y = display.contentHeight/6
 
 --create the correct text object and make it visible
 correctObject = display.newText ("Correct!", display.contentWidth/2, display.contentHeight*2/3, nil, 50)
@@ -260,7 +285,7 @@ incorrectObject.isVisible = false
 
 
 --create numeric field 
-numericField = native .newTextField( display.contentWidth/2, display.contentHeight/2, 150, 80)
+numericField = native .newTextField( display.contentWidth/1.8, display.contentHeight/2, 150, 80)
 numericField.inputType = "display"
 
 numericField:addEventListener( "userInput", NumericFieldListener )
@@ -283,13 +308,19 @@ heart2.y = display.contentHeight * 3.5/4
 heart3.x = display.contentWidth * 5 / 8
 heart3.y = display.contentHeight * 3.5/4
 
+--display the timer
 clockText = display.newText (secondsLeft .. " Seconds left!" , 150,100, nil, 35)
 
+--trophy
 trophy = display.newImageRect("Images/Trophy.png" , 200,200)
 --trophy.isVisible = false
-trophy.x = display.contentWidth*2
-trophy.y = display.contentHeight/2
+trophy.x = display.contentWidth/2
+trophy.y = display.contentHeight/5
 
+youWinImage = display.newImageRect("Images/YouWin.png" , 900, 300)
+youWinImage.isVisible = false
+youWinImage.x = 515
+youWinImage.y = 400
 ----------------------------------------------------------------------------------------------
 --FUNCTION CALLS
 ---------------------------------------------------------------------------------------------
@@ -297,4 +328,5 @@ trophy.y = display.contentHeight/2
 -- call the function to ask the question
 AskQuestion()
 
+--start the timer
 StartTimer()
