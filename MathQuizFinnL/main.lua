@@ -29,6 +29,9 @@ local correctObject
 local numericField
 local randomNumber1
 local randomNumber2
+local temp
+
+local pefectSquare
 local userAnswer
 local correctAnswer
 local incorrectAnswer
@@ -108,13 +111,13 @@ end
 
 local function AskQuestion() 
 	-- generate 3 random numbers between a max. and a min. number
-	randomOperator = math.random(2,2)
+	randomOperator = math.random(4,4)
 
 	--addition
 	if (randomOperator == 1) then
 		
-			randomNumber1 = math.random(0, 20)
-			randomNumber2 = math.random(0, 20)
+		randomNumber1 = math.random(0, 20)
+		randomNumber2 = math.random(0, 20)
 
 		correctAnswer = randomNumber1 + randomNumber2
 
@@ -139,44 +142,59 @@ local function AskQuestion()
 	--multiplacation
 	elseif (randomOperator == 3) then
 
-			randomNumber1 = math.random(0, 10)
-			randomNumber2 = math.random(0, 10)
+		randomNumber1 = math.random(0, 10)
+		randomNumber2 = math.random(0, 10)
 
 		correctAnswer = randomNumber1 * randomNumber2
 
 		--create question in text object
 		questionObject.text = randomNumber1 .. " x " .. randomNumber2 .. " = "
 
+
 	elseif (randomOperator == 4) then
 
 
-		randomNumber1 = math.random(0, 100)
-		randomNumber2 = math.random(0, 100)
+		randomNumber1 = math.random(0, 10)
+		randomNumber2 = math.random(0, 10)
 
+		
+		temp = randomNumber1 * randomNumber2
 		--division
-		correctAnswer = randomNumber1 / randomNumber2
+		correctAnswer = temp / randomNumber2
+
+
+
 
 		--create question in text object
-		questionObject.text = randomNumber1 .. " / " .. randomNumber2 .. " = "
+		questionObject.text = temp .. " / " .. randomNumber2 .. " = "
+
+
+
 	
+	-- 
 	elseif (randomOperator == 5) then
-	randomNumber1 = math.random(1,5)
-	randomNumber2 = math.random(1,4)
-	--make the exponent
-	exponent = math.pow(randomNumber1, randomNumber2)
-	--exponent
-	correctAnswer = exponent
 
-	--create question in text object
-	questionObject.text = randomNumber1 .. " ^ " .. randomNumber2 .. " = "
+		randomNumber1 = math.random(1,5)
+		randomNumber2 = math.random(1,4)
+		--make the exponent
+		exponent = math.pow(randomNumber1, randomNumber2)
+		--exponent
+		correctAnswer = exponent
 
-	--elseif
-	--randomNumber1
+		--create question in text object
+		questionObject.text = randomNumber1 .. " ^ " .. randomNumber2 .. " = "
 
+	elseif(randomOperator == 6)	then
+		randomNumber1 = math.random(1, 10)
 
+		-- square the number
+		temp = randomNumber1 * randomNumber1
 
+		--square root
+		correctAnswer = math.sqrt(temp)
 
-
+		--create question in text object
+		questionObject.text = temp .. " sqrt = "
 
 
 
@@ -243,11 +261,13 @@ local function NumericFieldListener(event)
 				--if they aren't the same
 				incorrectObject.isVisible = true
 				WrongChannel = audio.play(WrongSound)
-				timer.performWithDelay(2000, HideIncorrect)
-				timer.performWithDelay(1000, HideIncorrect)
+				timer.performWithDelay(2500, HideIncorrect)
+				--get rid of 1 life
 				lives = lives - 1
-				secondsLeft = totalSeconds
 				UpdateLives()
+				--reset timer
+				secondsLeft = totalSeconds
+				incorrectObject.text = " Incorrect, the correct answer was  " .. correctAnswer
 			end
 
 			event.target.text = ""
@@ -279,7 +299,7 @@ correctObject:setTextColor(255/255, 10/255, 50/255)
 correctObject.isVisible = false
 
 
-incorrectObject = display.newText ("Incorrect!", display.contentWidth/2, display.contentHeight*2/3, nil, 50)
+incorrectObject = display.newText ("Incorrect" , display.contentWidth/2, display.contentHeight*2/3, nil, 50)
 incorrectObject:setTextColor(255/255, 10/255, 50/255)
 incorrectObject.isVisible = false
 
@@ -313,7 +333,7 @@ clockText = display.newText (secondsLeft .. " Seconds left!" , 150,100, nil, 35)
 
 --trophy
 trophy = display.newImageRect("Images/Trophy.png" , 200,200)
---trophy.isVisible = false
+trophy.isVisible = false
 trophy.x = display.contentWidth/2
 trophy.y = display.contentHeight/5
 
