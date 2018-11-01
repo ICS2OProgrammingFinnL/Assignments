@@ -16,12 +16,20 @@ display.setDefault("background" , 200/255, 50/255, 255/255)
 -- LOCAL VARIABLES
 --------------------------------------------------------------------------------------------
 
---load and play the music
-local CorrectSound = audio.loadSound("Sounds/correctSound.mp3")
-local CorrectChannel
---load and play the music
-local WrongSound = audio.loadSound("Sounds/wrongSound.mp3")
-local WrongChannel
+--load the sound
+local correctSound = audio.loadSound("Sounds/correctSound.mp3")
+local correctChannel
+--load the sound
+local wrongSound = audio.loadSound("Sounds/wrongSound.mp3")
+local wrongChannel
+
+--load the sound
+local cheeringSound = audio.loadSound("Sounds/Cheer.mp3")
+local cheeringChannel
+
+--load the sound
+local failSound = audio.loadSound("Sounds/Failure.mp3")
+local failChannel
 
 -- create my local variables
 local questionObject
@@ -70,12 +78,15 @@ local function UpdateLives()
 	elseif ( lives == 1) then
 		heart2.isVisible = false
 	elseif ( lives == 0) then 
+		--display game over image and hide all other stuff
 		heart3.isVisible = false
 		gameOverImage.isVisible = true
 		numericField.isVisible = false
 		questionObject.isVisible = false
 		clockText.isVisible = false
 		points.isVisible = false
+		--play noise
+		failChannel = audio.play(failSound)
 	end
 end		
 
@@ -111,7 +122,7 @@ end
 
 local function AskQuestion() 
 	-- generate 3 random numbers between a max. and a min. number
-	randomOperator = math.random(4,4)
+	randomOperator = math.random(1,6)
 
 	--addition
 	if (randomOperator == 1) then
@@ -216,6 +227,8 @@ local function YouWin()
 		heart1.isVisible = false
 		heart2.isVisible = false
 		heart3.isVisible = false
+		timer.cancel(countdownTimer)
+		cheeringChannel = audio.play(cheeringSound)
 	end
 end
 
@@ -248,7 +261,7 @@ local function NumericFieldListener(event)
 			-- if the users answer and the correct answer are the same:
 			if (userAnswer == correctAnswer) then 
 				correctObject.isVisible = true
-				CorrectChannel = audio.play(CorrectSound)
+				correctChannel = audio.play(correctSound)
 				startingPoints = startingPoints + 1
 				timer.performWithDelay(1000, HideCorrect)
 				YouWin()
@@ -260,13 +273,14 @@ local function NumericFieldListener(event)
 			else
 				--if they aren't the same
 				incorrectObject.isVisible = true
-				WrongChannel = audio.play(WrongSound)
+				wrongChannel = audio.play(wrongSound)
 				timer.performWithDelay(2500, HideIncorrect)
 				--get rid of 1 life
 				lives = lives - 1
 				UpdateLives()
 				--reset timer
 				secondsLeft = totalSeconds
+				--tell the correct answer
 				incorrectObject.text = " Incorrect, the correct answer was  " .. correctAnswer
 			end
 
