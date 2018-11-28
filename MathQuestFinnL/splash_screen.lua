@@ -33,13 +33,12 @@ local swordSoundChannel
 -- LOCAL FUNCTIONS
 --------------------------------------------------------------------------------------------
 
--- The function that moves the beetleship across the screen
+-- The function that moves the logo across the screen
 local function moveLogo()
-     -- add the scroll speed to the x-value of the ship
+     -- add the scroll speed to the x-value of the logo
      logo.x = logo.x + scrollSpeed
-     -- change the transparency of the ship every time it moves so that it fades in
+     -- change the transparency of the logo every time it moves so that it fades in
      logo.alpha = logo.alpha + 0.01
-     logo:scale(1.005,1.005)
 end  
 
 local function NameFadeIn()
@@ -66,15 +65,22 @@ function scene:create( event )
     -- set the background to be black
     display.setDefault("background", 20/255, 20/255, 20/255)
 
-    -- Insert the beetleship image
-    logo = display.newImageRect("Images/CompanyLogoFinn.png", 200, 200)
+    -- Insert the logo image
+    logo = display.newImageRect("Images/CompanyLogoFinn.png", 600, 400)
 
-    -- set the initial x and y position of the beetleship
+    -- set the initial x and y position of the logo
     logo.x = 100
     logo.y = display.contentHeight/2
 
+    --set the alpha of logo to 0
+    logo.alpha = 0
+
     --diplsay company name
      name = display.newText("Dark Excalibur" ,  400, 100, nil,  75)
+        --set the alpha of name to 0
+        name.alpha = 0
+
+
     -- Insert objects into the scene group in order to ONLY be associated with this scene
     sceneGroup:insert( logo )
 
@@ -105,10 +111,10 @@ function scene:show( event )
         -- start the splash screen music
         swordSoundChannel = audio.play(swordSound )
 
-        -- Call the moveBeetleship function as soon as we enter the frame.
+        -- Call the movelogo function as soon as we enter the frame.
         Runtime:addEventListener("enterFrame", moveLogo)
 
-         -- Call the moveBeetleship function as soon as we enter the frame.
+         -- Call the movelogo function as soon as we enter the frame.
         Runtime:addEventListener("enterFrame", NameFadeIn)
 
         -- Go to the main menu screen after the given time.
@@ -139,7 +145,7 @@ function scene:hide( event )
     -- Called immediately after scene goes off screen.
     elseif ( phase == "did" ) then
         
-        -- stop the jungle sounds channel for this screen
+        -- stop the sword channel for this screen
         audio.stop(swordSoundChannel)
     end
 
