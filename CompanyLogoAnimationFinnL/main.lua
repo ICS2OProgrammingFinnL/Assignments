@@ -65,14 +65,10 @@ local function MoveLogo(event)
 	 logo:scale(1.005,1.005)
 end	 
 
-
-
 -- Movelogo and NameFadeIn will be called over and over again
 Runtime:addEventListener("enterFrame" , MoveLogo)
 Runtime:addEventListener("enterFrame" , NameFadeIn)
 
 timer.performWithDelay(5000, invisible)
-
-
 
 swordChannel = audio.play(sword)
