@@ -1,8 +1,8 @@
 -----------------------------------------------------------------------------------------
 --
 -- main_menu.lua
--- Created by: Your Name
--- Date: Month Day, Year
+-- Created by: Finn
+-- Date: 11-26, 2018
 -- Description: This is the main menu, displaying the credits, instructions & play buttons.
 -----------------------------------------------------------------------------------------
 
@@ -52,18 +52,22 @@ local musicChannel
 
 -- Creating Transition Function to Credits Page
 local function CreditsTransition( )       
-    composer.gotoScene( "credits_screen", {effect = "flipFadeOutIn", time = 500})
+    composer.gotoScene( "credits_screen", {effect = "slideUp", time = 500})
     --when button is pressed, it will play a noise
     buttonSoundChannel = audio.play(buttonSound)
+    --stop the music
+     audio.stop(musicChannel)
 end 
 
 -----------------------------------------------------------------------------------------
 
 -- Creating Transition to Level1 Screen
 local function Level1ScreenTransition( )
-    composer.gotoScene( "level1_screen", {effect = "zoomInOutFade", time = 1000})
+    composer.gotoScene( "level1_screen", {effect = "slideRight", time = 1000})
     --when button is pressed, it will play a noise
     buttonSoundChannel = audio.play(buttonSound)
+        --stop the music
+     audio.stop(musicChannel)
 end    
 
 -- INSERT LOCAL FUNCTION DEFINITION THAT GOES TO INSTRUCTIONS SCREEN 
@@ -72,6 +76,9 @@ local function InstructionsTransition( )
     composer.gotoScene( "instructions_screen", {effect = "zoomInOutFade", time = 1000})
     --when button is pressed, it will play a noise
     buttonSoundChannel = audio.play(buttonSound)
+        --stop the music
+     audio.stop(musicChannel)
+
 end    
 -----------------------------------------------------------------------------------------
 -- GLOBAL SCENE FUNCTIONS
